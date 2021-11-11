@@ -21,6 +21,7 @@ export class Visualizer {
 }
 
 export function VisualizerContainer({ visualizer }: VisualizerContainerProps) {
+
   const { name, draw } = visualizer;
 
   const analyzer: Tone.Analyser = useMemo(
@@ -47,6 +48,7 @@ export function VisualizerContainer({ visualizer }: VisualizerContainerProps) {
     const width = window.innerWidth;
     const height = window.innerHeight / 2;
     p5.createCanvas(width, height).parent(canvasParentRef);
+    
   };
 
   return (
