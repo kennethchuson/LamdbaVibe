@@ -57,13 +57,8 @@ class Particle {
 export const mitchthebakerVisualizer = new Visualizer(
   'Circumference',
   (p5: P5, analyzer: Tone.Analyser) => {
-    const width = window.innerWidth;
-    const height = window.innerHeight / 2;
-    const dim = Math.min(width, height);
-    const frameCount = p5.frameCount;
-
-    //p5.image(p5.loadImage(mandelbrot_set), 0, 0, width, height);
-    //p5.image(image, 0, 0, width, height);
+    const width = window.innerWidth / 2;
+    const height = window.innerHeight;
 
     p5.background(0);
     p5.stroke(255);
@@ -72,7 +67,6 @@ export const mitchthebakerVisualizer = new Visualizer(
     p5.translate(width / 2, height / 2);
     
     const wave = analyzer.getValue();
-    
 
     for(let t = -1; t <= 1; t += 2) {
       p5.beginShape();
@@ -86,7 +80,6 @@ export const mitchthebakerVisualizer = new Visualizer(
 
         let x = r * p5.sin(i) * t;
         let y = r * p5.cos(i);
-        //let y = Number(wave[index]) * 300 + height / 2;
         p5.vertex(x, y);
       }
 

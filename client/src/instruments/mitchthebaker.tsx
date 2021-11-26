@@ -35,8 +35,14 @@ export function UkuleleFret({
     // 1. The JSX refers to the HTML-looking syntax within TypeScript.
     // 2. The JSX will be **transpiled** into the corresponding `React.createElement` library call.
     // 3. The curly braces `{` and `}` should remind you of string interpolation.
-    <div className="ukulele-fret">
-    
+    <div 
+      className="ukulele-fret"
+      onMouseDown={() => {
+        console.log(note);
+        synth?.triggerAttack(`${note}`);
+      }}
+      onMouseUp={() => synth?.triggerRelease('+0.25')}
+    >
     </div>
   );
 }
@@ -73,10 +79,20 @@ function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
   //  { note: 'Bb', idx: 5.5 },
   //  { note: 'B', idx: 6 },
   //]);
+
   const frets = List([
-    { note: 'Ab', idx: 0 }, { note: 'Db', idx: 1 }, { note: 'F', idx: 2 }, { note: 'Bb', idx: 3 },
-    { note: 'A', idx: 4 }, { note: 'D', idx: 5 }, { note: 'Gb', idx: 6 }, { note: 'B', idx: 7 },
-    { note: 'Bb', idx: 8 }, { note: 'Eb', idx: 9 }, { note: 'G', idx: 10 }, { note: 'C', idx: 11 },
+    [{ note: 'Ab', octave: 5, idx: 0 }, { note: 'Db', octave: 5, idx: 1 }, { note: 'F', octave: 5, idx: 2 }, { note: 'Bb', octave: 5, idx: 3 }],
+    [{ note: 'A', octave: 5, idx: 4 }, { note: 'D', octave: 5, idx: 5 }, { note: 'Gb', octave: 5, idx: 6 }, { note: 'B', octave: 5, idx: 7 }],
+    [{ note: 'Bb', octave: 5, idx: 8 }, { note: 'Eb', octave: 5, idx: 9 }, { note: 'G', octave: 5, idx: 10 }, { note: 'C', octave: 5, idx: 11 }],
+    [{ note: 'B', octave: 5, idx: 12}, { note: 'E', octave: 5, idx: 13}, { note: 'Ab', octave: 5, idx: 14}, { note: 'Db', octave: 5, idx: 15}],
+    [{ note: 'C', octave: 5, idx: 16}, { note: 'F', octave: 5, idx: 17}, { note: 'A', octave: 5, idx: 18}, { note: 'D', octave: 5, idx: 19}],
+    [{ note: 'Db', octave: 5, idx: 20}, { note: 'Gb', octave: 5, idx: 21}, { note: 'Bb', octave: 5, idx: 22}, { note: 'Eb', octave: 5, idx: 23}],
+    [{ note: 'D', octave: 5, idx: 24}, { note: 'G', octave: 5, idx: 25}, { note: 'B', octave: 5, idx: 26}, { note: 'E', octave: 5, idx: 27}],
+    [{ note: 'Eb', octave: 5, idx: 28}, { note: 'Ab', octave: 5, idx: 29}, { note: 'C', octave: 5, idx: 30}, { note: 'F', octave: 5, idx: 31}],
+    [{ note: 'E', octave: 5, idx: 32}, { note: 'A', octave: 5, idx: 33}, { note: 'Db', octave: 5, idx: 34}, { note: 'Gb', octave: 5, idx: 35}],
+    [{ note: 'F', octave: 5, idx: 36}, { note: 'Bb', octave: 5, idx: 37}, { note: 'D', octave: 5, idx: 38}, { note: 'G', octave: 5, idx: 39}],
+    [{ note: 'Gb', octave: 5, idx: 40}, { note: 'B', octave: 5, idx: 42}, { note: 'Eb', octave: 5, idx: 43}, { note: 'Ab', octave: 5, idx: 44}],
+    [{ note: 'G', octave: 5, idx: 45}, { note: 'C', octave: 5, idx: 46}, { note: 'E', octave: 5, idx: 47}, { note: 'A', octave: 5, idx: 48}]
   ]);
 
   const setOscillator = (newType: Tone.ToneOscillatorType) => {
@@ -106,16 +122,17 @@ function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
     <div className="pv4">
       <div className="relative dib h4 w-100 ml4 ukulele">
         {
-          Range(1, 12).map(row => (
+          frets.map(fret => (
             <div className="fret">
-              {frets.map(fret => {
-                const note = `${fret.note}`;
+              {fret.map(aFret => {
+                const note = `${aFret.note}${aFret.octave}`;
+                
 
                 return (
                   <UkuleleFret 
                     note={note}
                     synth={synth}
-                    index={fret.idx}
+                    index={aFret.idx}
                   />
                 );
               })}

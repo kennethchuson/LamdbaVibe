@@ -2,7 +2,8 @@
 import * as Tone from 'tone';
 import Sketch from 'react-p5';
 import P5 from 'p5';
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import mandelbrot_set from './img/mandelbrot_set.png';
 
 type VisualizerDrawer = (p5: P5, analyzer: Tone.Analyser) => void;
 
@@ -23,6 +24,8 @@ export class Visualizer {
 export function VisualizerContainer({ visualizer }: VisualizerContainerProps) {
 
   const { name, draw } = visualizer;
+
+  let setCircumference = (name === "Circumference") ? true : false;
 
   const analyzer: Tone.Analyser = useMemo(
     () => new Tone.Analyser('waveform', 256),
@@ -45,14 +48,14 @@ export function VisualizerContainer({ visualizer }: VisualizerContainerProps) {
   }, [analyzer]);
 
   const setup = (p5: P5, canvasParentRef: Element) => {
-    const width = window.innerWidth;
-    const height = window.innerHeight / 2;
+    const width = (setCircumference) ? window.innerWidth / 2 : window.innerWidth;
+    const height = (setCircumference) ? window.innerHeight : window.innerHeight / 2; 
     p5.createCanvas(width, height).parent(canvasParentRef);
-    
+    p5.angleMode(p5.DEGREES);
   };
 
   return (
-    <div className={'bg-black absolute bottom-0 right-0 left-0 h-50'}>
+    <div className={setCircumference ? 'bg-grey absolute right-0 h-100 w-50' : 'bg-black absolute bottom-0 right-0 left-0 h-50'}>
       <div className={'z-1 absolute left-0 top-0 pa4 white f5'}>{name}</div>
       <Sketch
         setup={setup}
