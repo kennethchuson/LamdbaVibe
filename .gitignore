@@ -31,3 +31,4 @@ workspace.code-workspace
 
 # sqlite database file
 app.db
+client/package-lock.json
