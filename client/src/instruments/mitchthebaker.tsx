@@ -80,19 +80,34 @@ function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
   //  { note: 'B', idx: 6 },
   //]);
 
-  const frets = List([
+  const standard_tuning_1frets = List([
     [{ note: 'Ab', octave: 5, idx: 0 }, { note: 'Db', octave: 5, idx: 1 }, { note: 'F', octave: 5, idx: 2 }, { note: 'Bb', octave: 5, idx: 3 }],
     [{ note: 'A', octave: 5, idx: 4 }, { note: 'D', octave: 5, idx: 5 }, { note: 'Gb', octave: 5, idx: 6 }, { note: 'B', octave: 5, idx: 7 }],
-    [{ note: 'Bb', octave: 5, idx: 8 }, { note: 'Eb', octave: 5, idx: 9 }, { note: 'G', octave: 5, idx: 10 }, { note: 'C', octave: 5, idx: 11 }],
-    [{ note: 'B', octave: 5, idx: 12}, { note: 'E', octave: 5, idx: 13}, { note: 'Ab', octave: 5, idx: 14}, { note: 'Db', octave: 5, idx: 15}],
-    [{ note: 'C', octave: 5, idx: 16}, { note: 'F', octave: 5, idx: 17}, { note: 'A', octave: 5, idx: 18}, { note: 'D', octave: 5, idx: 19}],
-    [{ note: 'Db', octave: 5, idx: 20}, { note: 'Gb', octave: 5, idx: 21}, { note: 'Bb', octave: 5, idx: 22}, { note: 'Eb', octave: 5, idx: 23}],
-    [{ note: 'D', octave: 5, idx: 24}, { note: 'G', octave: 5, idx: 25}, { note: 'B', octave: 5, idx: 26}, { note: 'E', octave: 5, idx: 27}],
-    [{ note: 'Eb', octave: 5, idx: 28}, { note: 'Ab', octave: 5, idx: 29}, { note: 'C', octave: 5, idx: 30}, { note: 'F', octave: 5, idx: 31}],
-    [{ note: 'E', octave: 5, idx: 32}, { note: 'A', octave: 5, idx: 33}, { note: 'Db', octave: 5, idx: 34}, { note: 'Gb', octave: 5, idx: 35}],
-    [{ note: 'F', octave: 5, idx: 36}, { note: 'Bb', octave: 5, idx: 37}, { note: 'D', octave: 5, idx: 38}, { note: 'G', octave: 5, idx: 39}],
-    [{ note: 'Gb', octave: 5, idx: 40}, { note: 'B', octave: 5, idx: 42}, { note: 'Eb', octave: 5, idx: 43}, { note: 'Ab', octave: 5, idx: 44}],
-    [{ note: 'G', octave: 5, idx: 45}, { note: 'C', octave: 5, idx: 46}, { note: 'E', octave: 5, idx: 47}, { note: 'A', octave: 5, idx: 48}]
+    [{ note: 'Bb', octave: 5, idx: 8 }, { note: 'Eb', octave: 5, idx: 9 }, { note: 'G', octave: 5, idx: 10 }, { note: 'C', octave: 6, idx: 11 }],
+    [{ note: 'B', octave: 5, idx: 12}, { note: 'E', octave: 5, idx: 13}, { note: 'Ab', octave: 5, idx: 14}, { note: 'Db', octave: 6, idx: 15}],
+    [{ note: 'C', octave: 6, idx: 16}, { note: 'F', octave: 5, idx: 17}, { note: 'A', octave: 5, idx: 18}, { note: 'D', octave: 6, idx: 19}],
+    [{ note: 'Db', octave: 6, idx: 20}, { note: 'Gb', octave: 5, idx: 21}, { note: 'Bb', octave: 5, idx: 22}, { note: 'Eb', octave: 6, idx: 23}],
+    [{ note: 'D', octave: 6, idx: 24}, { note: 'G', octave: 5, idx: 25}, { note: 'B', octave: 5, idx: 26}, { note: 'E', octave: 6, idx: 27}],
+    [{ note: 'Eb', octave: 6, idx: 28}, { note: 'Ab', octave: 5, idx: 29}, { note: 'C', octave: 6, idx: 30}, { note: 'F', octave: 6, idx: 31}],
+    [{ note: 'E', octave: 6, idx: 32}, { note: 'A', octave: 5, idx: 33}, { note: 'Db', octave: 6, idx: 34}, { note: 'Gb', octave: 6, idx: 35}],
+    [{ note: 'F', octave: 6, idx: 36}, { note: 'Bb', octave: 5, idx: 37}, { note: 'D', octave: 6, idx: 38}, { note: 'G', octave: 6, idx: 39}],
+    [{ note: 'Gb', octave: 6, idx: 40}, { note: 'B', octave: 5, idx: 42}, { note: 'Eb', octave: 6, idx: 43}, { note: 'Ab', octave: 6, idx: 44}],
+    [{ note: 'G', octave: 6, idx: 45}, { note: 'C', octave: 6, idx: 46}, { note: 'E', octave: 6, idx: 47}, { note: 'A', octave: 6, idx: 48}]
+  ]);
+
+  const standard_tuning_2frets = List([
+    [{ note: 'Eb', octave: 4, idx: 0 }, { note: 'Ab', octave: 4, idx: 1 }, { note: 'C', octave: 5, idx: 2 }, { note: 'F', octave: 5, idx: 3 }],
+    [{ note: 'E', octave: 5, idx: 4 }, { note: 'A', octave: 5, idx: 5 }, { note: 'Db', octave: 5, idx: 6 }, { note: 'Gb', octave: 5, idx: 7 }],
+    [{ note: 'F', octave: 5, idx: 8 }, { note: 'Bb', octave: 5, idx: 9 }, { note: 'D', octave: 5, idx: 10 }, { note: 'G', octave: 5, idx: 11 }],
+    [{ note: 'Gb', octave: 5, idx: 12}, { note: 'B', octave: 5, idx: 13}, { note: 'Eb', octave: 5, idx: 14}, { note: 'Ab', octave: 5, idx: 15}],
+    [{ note: 'G', octave: 5, idx: 16}, { note: 'C', octave: 5, idx: 17}, { note: 'E', octave: 5, idx: 18}, { note: 'A', octave: 5, idx: 19}],
+    [{ note: 'Ab', octave: 5, idx: 20}, { note: 'Db', octave: 5, idx: 21}, { note: 'F', octave: 5, idx: 22}, { note: 'Bb', octave: 5, idx: 23}],
+    [{ note: 'A', octave: 5, idx: 24}, { note: 'D', octave: 5, idx: 25}, { note: 'Gb', octave: 5, idx: 26}, { note: 'B', octave: 5, idx: 27}],
+    [{ note: 'Bb', octave: 5, idx: 28}, { note: 'Eb', octave: 5, idx: 29}, { note: 'G', octave: 5, idx: 30}, { note: 'C', octave: 5, idx: 31}],
+    [{ note: 'B', octave: 5, idx: 32}, { note: 'E', octave: 5, idx: 33}, { note: 'Ab', octave: 5, idx: 34}, { note: 'Db', octave: 5, idx: 35}],
+    [{ note: 'C', octave: 5, idx: 36}, { note: 'F', octave: 5, idx: 37}, { note: 'A', octave: 5, idx: 38}, { note: 'D', octave: 5, idx: 39}],
+    [{ note: 'Db', octave: 5, idx: 40}, { note: 'Gb', octave: 5, idx: 42}, { note: 'Bb', octave: 5, idx: 43}, { note: 'Eb', octave: 5, idx: 44}],
+    [{ note: 'D', octave: 5, idx: 45}, { note: 'G', octave: 5, idx: 46}, { note: 'B', octave: 5, idx: 47}, { note: 'E', octave: 5, idx: 48}]
   ]);
 
   const setOscillator = (newType: Tone.ToneOscillatorType) => {
@@ -120,25 +135,27 @@ function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
 
   return (
     <div className="pv4">
-      <div className="relative dib h4 w-100 ml4 ukulele">
-        {
-          frets.map(fret => (
-            <div className="fret">
-              {fret.map(aFret => {
-                const note = `${aFret.note}${aFret.octave}`;
-                
+      <div className="relative dib h4 w-50">
+        <div className="ukulele">
+          {
+            standard_tuning_1frets.map(fret => (
+              <div className="fret">
+                {fret.map(aFret => {
+                  const note = `${aFret.note}${aFret.octave}`;
 
-                return (
-                  <UkuleleFret 
-                    note={note}
-                    synth={synth}
-                    index={aFret.idx}
-                  />
-                );
-              })}
-            </div>
-          ))
-        }
+
+                  return (
+                    <UkuleleFret 
+                      note={note}
+                      synth={synth}
+                      index={aFret.idx}
+                    />
+                  );
+                })}
+              </div>
+            ))
+          }
+        </div>
         {/*Range(2, 7).map(octave =>
           keys.map(key => {
             const isMinor = key.note.indexOf('b') !== -1;
