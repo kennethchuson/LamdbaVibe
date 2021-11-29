@@ -61,6 +61,7 @@ export function VisualizerContainer({ visualizer }: VisualizerContainerProps) {
         setup={setup}
         draw={p5 => draw(p5, analyzer)}
         windowResized={onResize}
+        className={setCircumference ? 'circumference-visualizer' : ''}
       />
     </div>
   );

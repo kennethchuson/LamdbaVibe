@@ -126,6 +126,9 @@ function Piano({ synth, setSynth }: InstrumentProps): JSX.Element {
     });
   };
 
+
+  
+
   const oscillators: List<OscillatorType> = List([
     'sine',
     'sawtooth',
