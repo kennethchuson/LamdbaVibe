@@ -32,4 +32,5 @@ export const defaultState: AppState = Map<string, any>({
   visualizers,
   isRecording: false,
   openPopup: false,
+  songTitle: '',
 });

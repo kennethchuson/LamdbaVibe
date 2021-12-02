@@ -34,7 +34,8 @@ type DispatchActionType =
   | 'GET_RECORDING_STATUS'
   | 'RECORD_A_SONG'
   | 'TRIGGER_RECORDING_POPUP'
-  | 'ADD_NOTE_TO_SONG';
+  | 'ADD_NOTE_TO_SONG'
+  | 'CREATE_SONG';
 
 export class DispatchAction {
   readonly type: DispatchActionType;
@@ -130,6 +131,17 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
             songCopy = [...songCopy, note];
 
         return state.set('song', songCopy);
+      }
+
+      case 'CREATE_SONG': {
+        const songTitle = args.get('songTitle');
+        const song = state.get('song');
+
+        console.log(songTitle);
+        console.log(song);
+
+        // should reinitialize song and songTitle back to initial states after 
+        return state.set('songTitle', songTitle);
       }
 
       default:

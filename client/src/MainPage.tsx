@@ -11,6 +11,7 @@ import { AppState } from './State';
 import { DispatchAction } from './Reducer';
 import { SideNav } from './SideNav';
 import { VisualizerContainer } from './Visualizers';
+import "./css/recording_popup.css";
 
 type PanelProps = {
   state: AppState;
@@ -85,10 +86,10 @@ function RecordingPopup({state, dispatch}: PanelProps): JSX.Element {
 
   return (
     <Popup open={openPopup} closeOnDocumentClick onClose={closeModal}>
-      <div className="modal">
-        <a className="close" onClick={closeModal}>
+      <div className="modal popup">
+        <button className="close" onClick={closeModal}>
           &times;
-        </a>
+        </button>
         <RecordingForm state={state} dispatch={dispatch}/>
       </div>
     </Popup>
@@ -97,29 +98,43 @@ function RecordingPopup({state, dispatch}: PanelProps): JSX.Element {
 
 function RecordingForm({state, dispatch}: PanelProps): JSX.Element {
   const [submitting, setSubmitting] = React.useState(false);
+  const [submitted, setSubmitted] = React.useState(false);
+  const [input, setInput] = React.useState('');
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-    console.log(e.type);
-    console.log(e);
     e.preventDefault();
     setSubmitting(true);
 
+    // submit value entered into form input to state to finalize creation of song 
+    dispatch(new DispatchAction('CREATE_SONG', { 
+      songTitle: input
+    }));
+
     setTimeout(() => {
       setSubmitting(false);
+      setSubmitted(true);
+
+      setTimeout(() => {
+        setSubmitted(false);
+        setInput('');
+      }, 3000);
     }, 3000);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
+
   return (
-    <form onSubmit={handleSubmit}>
-      <fieldset>
+    <form className="recording-form" onSubmit={handleSubmit}>
+      <fieldset className="form-fieldset">
         <label>
           <h3> You're almost done! </h3>
           <p> As a last step, enter a song title for your song recording. </p>
-          <input name="song_title"/>
+          <input value={input} onChange={handleInputChange}/>
         </label>
       </fieldset>
       <button type="submit"> Submit </button>
       {submitting && <div> Submitting form... </div>}
+      {submitted && <div> Your song has been submitted! </div>}
     </form>
   );
 }

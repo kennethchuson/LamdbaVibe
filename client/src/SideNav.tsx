@@ -7,7 +7,6 @@ import {
   RadioButton20,
   RadioButtonChecked20,
   Music20,
-  Recording32
 } from '@carbon/icons-react';
 
 // project imports
