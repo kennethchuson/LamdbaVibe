@@ -1,11 +1,13 @@
 import { Server, Socket } from 'socket.io';
-import { DB } from './Database';
 import http from 'http';
+
+import app from './App';
+import { DB } from './Database';
 import { MessageHandler } from './MessageHandler';
 import { GetSongsHandler } from './handlers/GetSongsHandler';
 
 const PORT = 3001;
-const VALID_ORIGINS = ['http://localhost:3000'];
+const VALID_ORIGINS = ['localhost:3000'];
 const PING_TIMEOUT_MS = 10000;
 const PING_INTERVAL_MS = 10000;
 const WS_PATH = '/ws';
@@ -28,7 +30,7 @@ function connectHandler(socket: Socket) {
 }
 
 export async function initServer(): Promise<Server> {
-   const httpServer = http.createServer();
+   const httpServer = http.createServer(app);
 
    httpServer.listen(PORT, 'localhost');
 

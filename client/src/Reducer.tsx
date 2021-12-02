@@ -1,5 +1,6 @@
 // 3rd party
 import { List, Map, fromJS } from 'immutable';
+import { getSongs } from './utils/apiCreators';
 
 // project deps
 import { Instrument } from './Instruments';
@@ -139,6 +140,9 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
 
         console.log(songTitle);
         console.log(song);
+
+        // send api call to backend 
+        getSongs();
 
         // should reinitialize song and songTitle back to initial states after 
         return state.set('songTitle', songTitle);

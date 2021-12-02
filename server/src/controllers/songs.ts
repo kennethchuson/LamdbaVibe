@@ -7,15 +7,17 @@ interface Song {
     notes: string,
 }
 
-const getSongs = async (req: Request, res: Response, next: NextFunction) => {
+export const getSongs = async (req: Request, res: Response, next: NextFunction) => {
     // get songs from the db 
 
+    console.log("HERE");
+    console.log(req);
     return res.status(200).json({
         message: "get songs"
     });
 };
 
-const getSong = async (req: Request, res: Response, next: NextFunction) => {
+export const getSong = async (req: Request, res: Response, next: NextFunction) => {
     // get a song from the db 
 
     let id: string = req.params.id; 
@@ -29,7 +31,7 @@ const getSong = async (req: Request, res: Response, next: NextFunction) => {
  * const updateSong = async () => {};
  */
 
-const deleteSong = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteSong = async (req: Request, res: Response, next: NextFunction) => {
     // delete a song from the db 
 
     let id: string = req.params.id; 
@@ -39,7 +41,7 @@ const deleteSong = async (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-const addSong = async (req: Request, res: Response, next: NextFunction) => {
+export const addSong = async (req: Request, res: Response, next: NextFunction) => {
     // add a song from the db 
 
     let title: string = req.body.title;
@@ -49,5 +51,3 @@ const addSong = async (req: Request, res: Response, next: NextFunction) => {
         message: "add a song"
     });
 };
-
-export default { getSongs, getSong, deleteSong, addSong };
