@@ -95,82 +95,33 @@ function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
     });
   };
 
-  const oscillators: List<OscillatorType> = List([
-    'sine',
-    'sawtooth',
-    'square',
-    'triangle',
-    'fmsine',
-    'fmsawtooth',
-    'fmtriangle',
-    'amsine',
-    'amsawtooth',
-    'amtriangle',
-  ]) as List<OscillatorType>;
-
-  /*const marker = (idx === 4 || 
-    idx === 6 ||
-    idx === 9) ? true : false;*/
-
   return (
     <div className="pv4">
       <div className="relative dib h4 w-50">
         <div className="ukulele">
-          {
-            standard_tuning_1frets.map((fret, idx) => {
-              const marker = (idx === 5 || idx === 7 || idx === 10) ? true : false;
-              
-              return (
-                <div className={idx === 0 ? "fret-strings" : "fret"}>
-                  {
-                    marker && <span className="fret-marker"></span>
-                  }
-                  {
-                    fret.map(aFret => {
-                      const note = `${aFret.note}${aFret.octave}`;
-  
-                      return (
-                        <UkuleleFret 
-                          note={note}
-                          synth={synth}
-                          index={idx}
-                        />
-                      );
-                    })
-                  }
-                </div>
-              );
-            })
-          }
-        </div>
-        {/*Range(2, 7).map(octave =>
-          keys.map(key => {
-            const isMinor = key.note.indexOf('b') !== -1;
-            const note = `${key.note}${octave}`;
+          {standard_tuning_1frets.map((fret, idx) => {
+            const marker = (idx === 5 || idx === 7 || idx === 10) ? true : false;
+            
             return (
-              <PianoKey
-                key={note} //react key
-                note={note}
-                synth={synth}
-                minor={isMinor}
-                octave={octave}
-                index={(octave - 2) * 7 + key.idx}
-              />
-            );
-          }),
-        )*/}
-      </div>
+              <div className={idx === 0 ? "fret-strings" : "fret"}>
+                {marker && <span className="fret-marker"></span>}
+                
+                {fret.map(aFret => {
+                    const note = `${aFret.note}${aFret.octave}`;
 
-      {/*<div className={'pl4 pt4 flex'}>
-        {oscillators.map(o => (
-          <PianoType
-            key={o}
-            title={o}
-            onClick={() => setOscillator(o)}
-            active={synth?.oscillator.type === o}
-          />
-        ))}
-        </div>*/}
+                    return (
+                      <UkuleleFret 
+                        note={note}
+                        synth={synth}
+                        index={idx}
+                      />
+                    );
+                  })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import {
   RadioButton20,
   RadioButtonChecked20,
   Music20,
+  Recording32
 } from '@carbon/icons-react';
 
 // project imports
@@ -29,7 +30,7 @@ const Section: React.FC<{ title: string }> = ({ title, children }) => {
   return (
     <div className="flex flex-column h-25 bb b--light-gray pa3">
       <div className="fw7 mb2">{title} </div>
-      <div className="flex-auto overflow-scroll">{children}</div>
+      <div className="flex-auto overflow-auto">{children}</div>
     </div>
   );
 };
@@ -38,6 +39,13 @@ interface RadioButtonProps {
   to: any,
   text: string,
   active: boolean,
+  onClick: () => void
+}
+
+// isActive will change the text contained in the record button
+// onClick will dispatch to redux action in Reducer.tsx
+interface RecordingButtonProps {
+  isRecording: boolean,
   onClick: () => void
 }
 
@@ -56,6 +64,14 @@ function RadioButton({ to, text, active, onClick }: RadioButtonProps): JSX.Eleme
         <div className="dim">{text}</div>
       </div>
     </Link>
+  );
+}
+
+function RecordingButton({ isRecording, onClick }: RecordingButtonProps): JSX.Element {
+  return (
+    <button className="flex items-center" onClick={onClick}>
+      {isRecording ? "Stop" : "Record"}
+    </button>
   );
 }
 
@@ -122,6 +138,30 @@ function Songs({ state, dispatch }: SideNavProps): JSX.Element {
   );
 }
 
+function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
+  const isRecording: boolean = state.get('isRecording');
+
+  return (
+    <Section title="Record a Song">
+      <RecordingButton
+        onClick={() => {
+          // notify redux and update state for whether the user is recording or not 
+          dispatch(new DispatchAction('TRIGGER_RECORDING', {
+            isRecording: isRecording
+          }));
+
+          // notify redux that a new song should be created
+          // a song should simply hold a list of the notes clicked by the user 
+          dispatch(new DispatchAction('RECORD_A_SONG', {
+            song: []
+          }));
+        }}
+        isRecording={isRecording}
+      />
+    </Section>
+  );
+}
+
 export function SideNav({ state, dispatch }: SideNavProps): JSX.Element {
   return (
     <div className="absolute top-0 left-0 bottom-0 w5 z-1 shadow-1 bg-white flex flex-column">
@@ -132,6 +172,7 @@ export function SideNav({ state, dispatch }: SideNavProps): JSX.Element {
         <Instruments state={state} dispatch={dispatch} />
         <Visualizers state={state} dispatch={dispatch} />
         <Songs state={state} dispatch={dispatch} />
+        <RecordingButtons state={state} dispatch={dispatch}/>
       </div>
     </div>
   );
