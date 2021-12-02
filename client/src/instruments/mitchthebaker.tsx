@@ -8,6 +8,8 @@ import "../css/ukulele.css";
 
 // project imports
 import { Instrument, InstrumentProps } from '../Instruments';
+import { DispatchAction } from '../Reducer';
+import { AppState } from '../State';
 
 /** ------------------------------------------------------------------------ **
  * Contains implementation of components for Piano.
@@ -19,12 +21,16 @@ interface UkuleleFretProps {
   synth?: Tone.Synth; // Contains library code for making sound
   minor?: boolean; // True if minor key, false if major key
   index: number; // octave + index together give a location for the piano key
+  state: AppState;
+  dispatch: React.Dispatch<DispatchAction>;
 }
 
 export function UkuleleFret({
   note,
   synth,
   index,
+  state, 
+  dispatch
 }: UkuleleFretProps): JSX.Element {
   /**
    * This React component corresponds to either a major or minor key in the piano.
@@ -40,6 +46,13 @@ export function UkuleleFret({
       onMouseDown={() => {
         console.log(note);
         synth?.triggerAttack(`${note}`);
+
+        // only add the note into a new song if recording button has been clicked
+        if(state.get('isRecording')) {
+          dispatch(new DispatchAction('ADD_NOTE_TO_SONG', {
+            note: note
+          }));
+        }
       }}
       onMouseUp={() => synth?.triggerRelease('+0.25')}
     >
@@ -47,7 +60,7 @@ export function UkuleleFret({
   );
 }
 
-function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
+function Ukulele({ state, dispatch, synth, setSynth }: InstrumentProps): JSX.Element {
 
   const standard_tuning_1frets = List([
     // strings 
@@ -70,8 +83,8 @@ function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
     [{ note: 'G', octave: 6, idx: 45}, { note: 'C', octave: 6, idx: 46}, { note: 'E', octave: 6, idx: 47}, { note: 'A', octave: 6, idx: 48}]
   ]);
 
-  /*const standard_tuning_2frets = List([
-    [{ note: 'Eb', octave: 4, idx: 0 }, { note: 'Ab', octave: 4, idx: 1 }, { note: 'C', octave: 5, idx: 2 }, { note: 'F', octave: 5, idx: 3 }],
+  const standard_tuning_2frets = List([
+    [{ note: 'Eb', octave: 3, idx: 0 }, { note: 'Ab', octave: 3, idx: 1 }, { note: 'C', octave: 3, idx: 2 }, { note: 'F', octave: 3, idx: 3 }],
     [{ note: 'E', octave: 5, idx: 4 }, { note: 'A', octave: 5, idx: 5 }, { note: 'Db', octave: 5, idx: 6 }, { note: 'Gb', octave: 5, idx: 7 }],
     [{ note: 'F', octave: 5, idx: 8 }, { note: 'Bb', octave: 5, idx: 9 }, { note: 'D', octave: 5, idx: 10 }, { note: 'G', octave: 5, idx: 11 }],
     [{ note: 'Gb', octave: 5, idx: 12}, { note: 'B', octave: 5, idx: 13}, { note: 'Eb', octave: 5, idx: 14}, { note: 'Ab', octave: 5, idx: 15}],
@@ -83,7 +96,7 @@ function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
     [{ note: 'C', octave: 5, idx: 36}, { note: 'F', octave: 5, idx: 37}, { note: 'A', octave: 5, idx: 38}, { note: 'D', octave: 5, idx: 39}],
     [{ note: 'Db', octave: 5, idx: 40}, { note: 'Gb', octave: 5, idx: 42}, { note: 'Bb', octave: 5, idx: 43}, { note: 'Eb', octave: 5, idx: 44}],
     [{ note: 'D', octave: 5, idx: 45}, { note: 'G', octave: 5, idx: 46}, { note: 'B', octave: 5, idx: 47}, { note: 'E', octave: 5, idx: 48}]
-  ]);*/
+  ]);
 
   const setOscillator = (newType: Tone.ToneOscillatorType) => {
     setSynth(oldSynth => {
@@ -114,6 +127,8 @@ function Ukulele({ synth, setSynth }: InstrumentProps): JSX.Element {
                         note={note}
                         synth={synth}
                         index={idx}
+                        state={state}
+                        dispatch={dispatch}
                       />
                     );
                   })}

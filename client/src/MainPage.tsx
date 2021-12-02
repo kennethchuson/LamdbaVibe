@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as Tone from 'tone';
 import { Music32 } from '@carbon/icons-react';
+import Popup from 'reactjs-popup';
 
 // project imports
 import { InstrumentContainer } from './Instruments';
@@ -66,7 +67,60 @@ function InstrumentAndVisualizer({ state, dispatch }: PanelProps): JSX.Element {
     >
       <InstrumentPanel state={state} dispatch={dispatch} />
       <VisualizerPanel state={state} dispatch={dispatch} />
+      <RecordingPopup state={state} dispatch={dispatch} />
     </div>
+  );
+}
+
+function RecordingPopup({state, dispatch}: PanelProps): JSX.Element {
+  /**
+   * This React component will be displayed after a song has been finished recording.
+   */
+
+  const openPopup: boolean = state.get('openPopup');
+
+  const closeModal = () => dispatch(new DispatchAction('TRIGGER_RECORDING_POPUP', {
+    openPopup: openPopup
+  }));
+
+  return (
+    <Popup open={openPopup} closeOnDocumentClick onClose={closeModal}>
+      <div className="modal">
+        <a className="close" onClick={closeModal}>
+          &times;
+        </a>
+        <RecordingForm state={state} dispatch={dispatch}/>
+      </div>
+    </Popup>
+  );
+}
+
+function RecordingForm({state, dispatch}: PanelProps): JSX.Element {
+  const [submitting, setSubmitting] = React.useState(false);
+
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    console.log(e.type);
+    console.log(e);
+    e.preventDefault();
+    setSubmitting(true);
+
+    setTimeout(() => {
+      setSubmitting(false);
+    }, 3000);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <fieldset>
+        <label>
+          <h3> You're almost done! </h3>
+          <p> As a last step, enter a song title for your song recording. </p>
+          <input name="song_title"/>
+        </label>
+      </fieldset>
+      <button type="submit"> Submit </button>
+      {submitting && <div> Submitting form... </div>}
+    </form>
   );
 }
 

@@ -140,6 +140,7 @@ function Songs({ state, dispatch }: SideNavProps): JSX.Element {
 
 function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
   const isRecording: boolean = state.get('isRecording');
+  const openPopup: boolean = state.get('openPopup');
 
   return (
     <Section title="Record a Song">
@@ -150,11 +151,24 @@ function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
             isRecording: isRecording
           }));
 
-          // notify redux that a new song should be created
-          // a song should simply hold a list of the notes clicked by the user 
-          dispatch(new DispatchAction('RECORD_A_SONG', {
-            song: []
-          }));
+          // create some sort of condition here if isRecording is set to true
+          if(!state.get('isRecording')) {
+            console.log("start recording");
+            // notify redux that a new song should be created
+            // a song should simply hold a list of the notes clicked by the user 
+            dispatch(new DispatchAction('RECORD_A_SONG', {
+              song: []
+            }));
+          }
+          else {
+            // stop recording a song and add song to db
+            console.log("stop recording");
+            
+            // if a recording is stopped, then open the popup menu where the song title will be input
+            dispatch(new DispatchAction('TRIGGER_RECORDING_POPUP', {
+              openPopup: openPopup
+            }));
+          }
         }}
         isRecording={isRecording}
       />

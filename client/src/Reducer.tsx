@@ -31,7 +31,10 @@ type DispatchActionType =
   | 'STOP_SONG'
   | 'SET_LOCATION'
   | 'TRIGGER_RECORDING'
-  | 'RECORD_A_SONG';
+  | 'GET_RECORDING_STATUS'
+  | 'RECORD_A_SONG'
+  | 'TRIGGER_RECORDING_POPUP'
+  | 'ADD_NOTE_TO_SONG';
 
 export class DispatchAction {
   readonly type: DispatchActionType;
@@ -105,12 +108,30 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
       
       case 'TRIGGER_RECORDING': {
         const isRecording = args.get('isRecording');
+
         return state.set('isRecording', !isRecording);
       }
 
-      case 'RECORD_A_SONG': {
-        return state;
+      case 'TRIGGER_RECORDING_POPUP': {
+        const openPopup = args.get('openPopup');
+
+        return state.set('openPopup', !openPopup);
       }
+
+      case 'RECORD_A_SONG': {
+        const song: string[] = args.get('song');
+
+        return state.set('song', song);
+      }
+
+      case 'ADD_NOTE_TO_SONG': {
+        const note: string = args.get('note');
+        let songCopy: string[] = state.get('song');
+            songCopy = [...songCopy, note];
+
+        return state.set('song', songCopy);
+      }
+
       default:
         console.error(`type unknown: ${type}\n`, args.toJS());
         return state;
