@@ -86,11 +86,11 @@ function RecordingPopup({state, dispatch}: PanelProps): JSX.Element {
   }));
 
   return (
-    <Popup open={openPopup} closeOnDocumentClick onClose={closeModal}>
+    <Popup open={openPopup} closeOnDocumentClick>
       <div className="modal popup">
-        <button className="close" onClick={closeModal}>
+        <a className="close" onClick={closeModal}>
           &times;
-        </button>
+        </a>
         <RecordingForm state={state} dispatch={dispatch}/>
       </div>
     </Popup>

@@ -1,6 +1,6 @@
 // 3rd party
 import { List, Map, fromJS } from 'immutable';
-import { getSongs } from './utils/apiCreators';
+import { addSong } from './utils/apiCreators';
 
 // project deps
 import { Instrument } from './Instruments';
@@ -135,14 +135,14 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
       }
 
       case 'CREATE_SONG': {
-        const songTitle = args.get('songTitle');
-        const song = state.get('song');
+        const songTitle: string = args.get('songTitle');
+        const song: string[] = state.get('song');
 
         console.log(songTitle);
         console.log(song);
 
         // send api call to backend 
-        getSongs();
+        addSong(songTitle, song);
 
         // should reinitialize song and songTitle back to initial states after 
         return state.set('songTitle', songTitle);
