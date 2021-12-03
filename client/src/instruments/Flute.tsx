@@ -19,6 +19,12 @@ interface FluteKeyProps {
   index: number; // octave + index together give a location for the piano key
 }
 
+const Monosynth = new Tone.MonoSynth().toDestination();
+
+Monosynth.set({
+  detune: -2000
+})
+
 export function FluteKey({
   note,
   synth,
@@ -35,22 +41,23 @@ export function FluteKey({
     // 2. The JSX will be **transpiled** into the corresponding `React.createElement` library call.
     // 3. The curly braces `{` and `}` should remind you of string interpolation.
     <div
-      onMouseDown={() => synth?.triggerAttack(`${note}`)} // Question: what is `onMouseDown`?
-      onMouseUp={() => synth?.triggerRelease('+0.025')} // Question: what is `onMouseUp`?
+      onMouseDown={() => Monosynth?.triggerAttack(`${note}`)} // Question: what is `onMouseDown`?
+      onMouseUp={() => Monosynth?.triggerRelease('+0.32')} // Question: what is `onMouseUp`?
       className={classNames('ba pointer absolute dim', {
         'black bg-white h4': !minor, // major keys are white
       })}
       style={{
         // CSS
         top: 6,
-        left: `${index * 6.85}rem`,
+        left: `${index * 5}rem`,
         zIndex: minor ? 4 : 2,
         width: minor ? '2rem' : '5rem',
         height: minor ? '2rem' : '5rem',
         borderRadius: 88/2,
         marginLeft: minor ? '0.25rem' : 25,
       }}
-    ></div>
+    >
+   </div>
   );
 }
 
@@ -100,8 +107,9 @@ function Flute({ synth }: InstrumentProps): JSX.Element {
     { note: 'B', octave: 6, idx: 7 }],
     [{ note: 'Bb', octave: 6, idx: 8 }, 
     { note: 'Eb', octave: 6, idx: 9 }, 
-    { note: 'G', octave: 4, idx: 10 }, 
-    { note: 'C', octave: 4, idx: 11 }],
+    // { note: 'G', octave: 4, idx: 10 }, 
+    // { note: 'C', octave: 4, idx: 11 }
+  ]
   ]);
 
   return (
@@ -123,6 +131,19 @@ function Flute({ synth }: InstrumentProps): JSX.Element {
               </div>
             ))
           }
+          <img
+     src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Pan_flute.svg/868px-Pan_flute.svg.png"
+     alt="Pan"
+     style={{
+       margin: "10px",
+       width: "650px",
+       borderRadius: "30px",
+       objectFit: "scale-down",
+       marginBottom: "15px",
+       alignSelf: 'center'
+       
+     }}
+   />
         </div> 
         <div className={'pl4 pt4 flex'}>
           </div>
