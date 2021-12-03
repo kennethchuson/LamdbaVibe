@@ -30,4 +30,7 @@ const visualizers = List([WaveformVisualizer, mitchthebakerVisualizer, KennethVi
 export const defaultState: AppState = Map<string, any>({
   instruments,
   visualizers,
+  isRecording: false,
+  openPopup: false,
+  songTitle: '',
 });

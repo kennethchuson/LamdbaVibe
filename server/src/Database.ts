@@ -79,6 +79,8 @@ export class DB {
       this.memo.set(path, query);
     }
 
+    console.log(query);
+
     const db = await this.getDB();
     return new Promise((resolve, reject) => {
       db.all(query, args, (err, rows) => {
@@ -90,6 +92,30 @@ export class DB {
       });
     });
   }
+
+  public static async insertQuery(path: string, ...args: any[]): Promise<any[]> {
+    let query: string;
+    const hasQuery = DB.memo.get(path);
+    if (hasQuery) {
+      query = hasQuery;
+    } else {
+      query = await slurp(path);
+      this.memo.set(path, query);
+    }
+
+    console.log(query);
+
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      db.run(query, args, (err: Error, rows: any[]) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows.map(r => camelcaseKeys(r)));
+        }
+      });
+    });
+  }  
 }
 
 async function slurp(sqlFile: string): Promise<string> {

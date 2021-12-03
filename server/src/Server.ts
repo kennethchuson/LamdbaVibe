@@ -1,6 +1,8 @@
 import { Server, Socket } from 'socket.io';
-import { DB } from './Database';
 import http from 'http';
+
+import app from './App';
+import { DB } from './Database';
 import { MessageHandler } from './MessageHandler';
 import { GetSongsHandler } from './handlers/GetSongsHandler';
 
@@ -28,7 +30,7 @@ function connectHandler(socket: Socket) {
 }
 
 export async function initServer(): Promise<Server> {
-   const httpServer = http.createServer();
+   const httpServer = http.createServer(app);
 
    httpServer.listen(PORT, 'localhost');
 
