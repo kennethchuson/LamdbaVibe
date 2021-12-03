@@ -21,13 +21,8 @@ interface FluteKeyProps {
 
 const Monosynth = new Tone.MonoSynth().toDestination();
 
-Monosynth.set({
-  detune: -2000
-})
-
 export function FluteKey({
   note,
-  synth,
   minor,
   index,
 }: FluteKeyProps): JSX.Element {
@@ -60,39 +55,6 @@ export function FluteKey({
    </div>
   );
 }
-
-// // eslint-disable-next-line
-// function PianoKeyWithoutJSX({
-//   note,
-//   synth,
-//   minor,
-//   index,
-// }: FluteKeyProps): JSX.Element {
-//   /**
-//    * This React component for pedagogical purposes.
-//    * See `PianoKey` for the React component with JSX (JavaScript XML).
-//    */
-//   return React.createElement(
-//     'div',
-//     {
-//       onMouseDown: () => synth?.triggerAttack(`${note}`),
-//       onMouseUp: () => synth?.triggerRelease('+0.25'),
-//       className: classNames('ba pointer absolute dim', {
-//         'bg-black black h3': minor,
-//         'black bg-white h4': !minor,
-//       }),
-//       style: {
-//         top: 0,
-//         left: `${index * 25}rem`,
-//         zIndex: minor ? 1 : 0,
-//         width: minor ? '1.5rem' : '2rem',
-//         marginLeft: minor ? '0.25rem' : 0,
-//       },
-//     },
-//     [],
-//   );
-//}
-
 
 function Flute({ synth }: InstrumentProps): JSX.Element {
 
