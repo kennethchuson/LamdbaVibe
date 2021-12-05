@@ -12,15 +12,11 @@ CREATE TABLE songs (
 	notes text NOT NULL
 );
 
-INSERT INTO songs (song_title, notes) 
-VALUES ('Ode to Joy (Dubstep Remix)', 'E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4 D4 D4');
+INSERT INTO songs (id, song_title, notes) 
+VALUES (1, 'Ode to Joy (Dubstep Remix)', 'E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4 D4 D4');
 
-INSERT INTO songs (song_title, notes) 
-VALUES ('Kenneth`s Stupid Song', 'G4 G4 F4 G4 G4 F4 G4 A4 B4 C5 B4 A4 G4');
+INSERT INTO songs (id, song_title, notes) 
+VALUES (2, 'Kenneth`s Stupid Song', 'G4 G4 F4 G4 G4 F4 G4 A4 B4 C5 B4 A4 G4');
 
-INSERT INTO songs (song_title, notes) 
-VALUES ('Ninja Kun (Nes Soundtrack) ', 'A4 C5 D5 A4 C5 C5 C5 A4 C5 D5 A4 C5 C5 C5 C5 D5 D5 D5 D5 A4 G4 C5 A4 G4 G4 G4 G4 A4 C5 D5 G4 G4 G4 G4 A4 C5 A4 C5 C5 C5 E5 F5 G5 F5 E5 C5 C5 C5 G4 A4 C5 A4');
-
-INSERT INTO songs (song_title, notes) 
-VALUES ('Michael`s Not a Musician', 'D4 E4 E4 E4 D4 D4 E4 E4 F4 G4 G4 F4 E4 D4 C4 F4 G4 G4 F4 C4 D4 E4 E4 D4 D4');
-
+INSERT INTO songs (id, song_title, notes) 
+VALUES (3, 'Ninja Kun (Nes Soundtrack) ', 'A4 C5 D5 A4 C5 C5 C5 A4 C5 D5 A4 C5 C5 C5 C5 D5 D5 D5 D5 A4 G4 C5 A4 G4 G4 G4 G4 A4 C5 D5 G4 G4 G4 G4 A4 C5 A4 C5 C5 C5 E5 F5 G5 F5 E5 C5 C5 C5 G4 A4 C5 A4');

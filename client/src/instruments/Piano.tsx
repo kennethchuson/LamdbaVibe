@@ -6,6 +6,8 @@ import React from 'react';
 
 // project imports
 import { Instrument, InstrumentProps } from '../Instruments';
+import { DispatchAction } from '../Reducer';
+import { AppState } from '../State';
 
 /** ------------------------------------------------------------------------ **
  * Contains implementation of components for Piano.
@@ -18,6 +20,8 @@ interface PianoKeyProps {
   minor?: boolean; // True if minor key, false if major key
   octave: number;
   index: number; // octave + index together give a location for the piano key
+  state: AppState;
+  dispatch: React.Dispatch<DispatchAction>;
 }
 
 export function PianoKey({
@@ -25,6 +29,8 @@ export function PianoKey({
   synth,
   minor,
   index,
+  state,
+  dispatch
 }: PianoKeyProps): JSX.Element {
   /**
    * This React component corresponds to either a major or minor key in the piano.
@@ -36,7 +42,16 @@ export function PianoKey({
     // 2. The JSX will be **transpiled** into the corresponding `React.createElement` library call.
     // 3. The curly braces `{` and `}` should remind you of string interpolation.
     <div
-      onMouseDown={() => synth?.triggerAttack(`${note}`)} // Question: what is `onMouseDown`?
+      onMouseDown={() => {
+        synth?.triggerAttack(`${note}`);
+
+        // only add the note into a new song if recording button has been clicked
+        if(state.get('isRecording')) {
+          dispatch(new DispatchAction('ADD_NOTE_TO_SONG', {
+            note: note
+          }));
+        }
+      }} // Question: what is `onMouseDown`?
       onMouseUp={() => synth?.triggerRelease('+0.25')} // Question: what is `onMouseUp`?
       className={classNames('ba pointer absolute dim', {
         'bg-black black h3': minor, // minor keys are black
@@ -100,7 +115,7 @@ function PianoType({ title, onClick, active }: any): JSX.Element {
   );
 }
 
-function Piano({ synth, setSynth }: InstrumentProps): JSX.Element {
+function Piano({ state, dispatch, synth, setSynth }: InstrumentProps): JSX.Element {
   const keys = List([
     { note: 'C', idx: 0 },
     { note: 'Db', idx: 0.5 },
@@ -157,6 +172,8 @@ function Piano({ synth, setSynth }: InstrumentProps): JSX.Element {
                 minor={isMinor}
                 octave={octave}
                 index={(octave - 2) * 7 + key.idx}
+                state={state}
+                dispatch={dispatch}
               />
             );
           }),

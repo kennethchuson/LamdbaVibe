@@ -1,12 +1,15 @@
 // 3rd party library imports
 import classNames from 'classnames';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import {
   RadioButton20,
   RadioButtonChecked20,
   Music20,
+  TrashCan20,
+  Edit20,
+  OverflowMenuHorizontal20,
 } from '@carbon/icons-react';
 
 // project imports
@@ -14,6 +17,7 @@ import { DispatchAction } from './Reducer';
 import { AppState } from './State';
 import { Instrument } from './Instruments';
 import { Visualizer } from './Visualizers';
+import './css/ud-menu.css';
 
 
 /** ------------------------------------------------------------------------ **
@@ -23,6 +27,9 @@ import { Visualizer } from './Visualizers';
 interface SideNavProps {
   state: AppState;
   dispatch: React.Dispatch<DispatchAction>;
+  isShowingUD?: boolean;
+  songId?: number;
+  song?: Map<any, any>; 
 }
 
 const Section: React.FC<{ title: string }> = ({ title, children }) => {
@@ -52,7 +59,7 @@ function RadioButton({ to, text, active, onClick }: RadioButtonProps): JSX.Eleme
   return (
     <Link to={to} className="no-underline">
       <div
-        className={classNames('f6 flex items-center black', { fw7: active })}
+        className={classNames('f7 flex items-center black', { fw7: active })}
         onClick={onClick}
       >
         {active ? (
@@ -71,6 +78,59 @@ function RecordingButton({ isRecording, onClick }: RecordingButtonProps): JSX.El
     <button className="flex items-center" onClick={onClick}>
       {isRecording ? "Stop" : "Record"}
     </button>
+  );
+}
+
+function UpdateAndDeleteButton({state, dispatch, songId, isShowingUD}: SideNavProps): JSX.Element {
+
+  const [newTitle, setNewTitle] = React.useState('');
+
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(newTitle);
+
+    dispatch(new DispatchAction('UPDATE_SONG_TITLE', {
+      songId: songId,
+      newTitle: newTitle,
+      dispatch: dispatch
+    }));
+
+    setNewTitle('');
+  };
+
+  const handleDelete = () => {
+    dispatch(new DispatchAction('DELETE_SONG', { 
+      songId: songId,
+      dispatch: dispatch
+    }));
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setNewTitle(e.target.value);
+
+  return (
+    <div className="ud-menu">
+      { isShowingUD && (
+        <div className="ud-menu-content">
+          <form className="update-form" onSubmit={handleSubmit}>
+            <fieldset className="update-form-fieldset">
+              <label>
+                <input
+                    value={newTitle}
+                    onChange={handleTitleChange}
+                    type="text"
+                    placeholder="Edit the song name"
+                />
+                <input type="submit" hidden /> 
+              </label>
+            </fieldset>
+          </form>
+          <TrashCan20 
+            className="delete-icon"
+            onClick={handleDelete}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -117,22 +177,53 @@ function Visualizers({ state }: SideNavProps): JSX.Element {
   );
 }
 
+function Song({state, dispatch, songId, song}: SideNavProps): JSX.Element {
+
+  // UD is an abbreviation for update/delete 
+  const [isShowingUD, setIsShowingUD] = React.useState(false);  
+
+  return ( 
+    (song !== undefined) ? 
+      <div className="song-wrapper">
+        <div className="inline-flex w-100">
+          <div
+            key={song.get('id')}
+            className="f7 pointer song underline no-underline i"
+            onClick={() =>
+              dispatch(new DispatchAction('PLAY_SONG', { id: song.get('id') }))
+            }
+          >
+            <div className="song-content dim">
+              <Music20 className="mr1" />
+              {song.get('songTitle')}
+            </div>
+          </div>
+          <div className="overflow-menu">
+            <OverflowMenuHorizontal20 
+              onClick={() => setIsShowingUD(!isShowingUD)}
+            />
+          </div>
+        </div>
+        
+        <UpdateAndDeleteButton state={state} dispatch={dispatch} songId={songId} isShowingUD={isShowingUD}/>
+      </div> 
+      : <> </>
+  );
+}
+
 function Songs({ state, dispatch }: SideNavProps): JSX.Element {
   const songs: List<any> = state.get('songs', List());
+
+
   return (
     <Section title="Playlist">
-      {songs.map(song => (
-        <div
-          key={song.get('id')}
-          className="f6 pointer underline flex items-center no-underline i dim"
-          onClick={() =>
-            dispatch(new DispatchAction('PLAY_SONG', { id: song.get('id') }))
-          }
-        >
-          <Music20 className="mr1" />
-          {song.get('songTitle')}
-        </div>
-      ))}
+      {songs.map(song => {
+        const songId: number = song.get('id');
+
+        return (
+          <Song state={state} dispatch={dispatch} song={song} songId={songId}/>
+        );
+      })}
     </Section>
   );
 }
