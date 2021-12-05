@@ -1,6 +1,6 @@
 // 3rd party
 import { List, Map, fromJS } from 'immutable';
-import { addSong } from './utils/apiCreators';
+import { getSongs, updateSong, addSong, deleteSong } from './utils/apiCreators';
 
 // project deps
 import { Instrument } from './Instruments';
@@ -36,7 +36,9 @@ type DispatchActionType =
   | 'RECORD_A_SONG'
   | 'TRIGGER_RECORDING_POPUP'
   | 'ADD_NOTE_TO_SONG'
-  | 'CREATE_SONG';
+  | 'CREATE_SONG'
+  | 'UPDATE_SONG_TITLE'
+  | 'DELETE_SONG';
 
 export class DispatchAction {
   readonly type: DispatchActionType;
@@ -75,6 +77,7 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
       
       case 'SET_SONGS': {
         const songs = args.get('songs');
+        console.log(songs);
         return state.set('songs', songs);
       }
       
@@ -137,15 +140,35 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
       case 'CREATE_SONG': {
         const songTitle: string = args.get('songTitle');
         const song: string[] = state.get('song');
+        const dispatch: React.Dispatch<DispatchAction> = args.get('dispatch');
 
         console.log(songTitle);
         console.log(song);
 
         // send api call to backend 
-        addSong(songTitle, song);
+        addSong(dispatch, songTitle, song);
 
         // should reinitialize song and songTitle back to initial states after 
         return state.set('songTitle', songTitle);
+      }
+
+      case 'UPDATE_SONG_TITLE': {
+        const songId: number = args.get('songId');
+        const newTitle: string = args.get('newTitle');
+        const dispatch: React.Dispatch<DispatchAction> = args.get('dispatch');
+
+        updateSong(dispatch, newTitle, songId);
+
+        return state;
+      }
+
+      case 'DELETE_SONG': {
+        const songId: number = args.get('songId');
+        const dispatch: React.Dispatch<DispatchAction> = args.get('dispatch');
+
+        deleteSong(dispatch, songId);
+
+        return state;
       }
 
       default:

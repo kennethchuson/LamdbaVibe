@@ -12,9 +12,11 @@ interface Song {
 export const getSongs = async (req: Request, res: Response, next: NextFunction) => {
     // get songs from the db 
     try {
-        console.log(req);
+        const songs = await DB.runQuery(path.join('get_songs'));
+        console.log(songs);
         return res.status(200).json({
-            message: "get songs"
+            message: "Successfully got all songs",
+            songs: songs
         });
     }
     catch(err) {
@@ -36,18 +38,58 @@ export const getSong = async (req: Request, res: Response, next: NextFunction) =
     }
 };
 
-/**
- * const updateSong = async () => {};
- */
+
+export const updateSong = async (req: Request, res: Response, next: NextFunction) => {
+    // update a song from the db 
+    try {
+        const { newTitle, songId } = req.query;
+        console.log(newTitle);
+        console.log(songId);
+
+        if(!newTitle || !songId) {
+            return res.status(400).json({
+                message: "Invalid query parameters sent from request"
+            });
+        }
+
+        const data = await DB.runQuery(path.join('update_song'), newTitle, songId);
+
+        return (data) ? 
+            res.status(200).json({
+                message: "Updated a song successfully",
+                data: data
+            }) 
+            : res.status(204).json({
+                message: `Failed to update song with id ${songId}`
+            });
+    }
+    catch(err) {
+        next(err);
+    }
+};
+
 
 export const deleteSong = async (req: Request, res: Response, next: NextFunction) => {
     // delete a song from the db 
     try {
-        const id: string = req.params.id; 
+        const { songId } = req.body;
+        
+        if(!songId) {
+            return res.status(400).json({
+                message: "Invalid body sent from request"
+            });
+        }
 
-        return res.status(200).json({
-            message: "delete a song"
-        });
+        const data = await DB.runQuery(path.join('delete_song'), songId);
+
+        return (data) ? 
+            res.status(200).json({
+                message: "Deleted a song successfully",
+                data: data
+            }) 
+            : res.status(204).json({
+                message: `Failed to delete song with id ${songId}`
+            });
     }
     catch(err) {
         next(err);
