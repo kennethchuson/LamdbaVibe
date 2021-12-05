@@ -59,7 +59,7 @@ function RadioButton({ to, text, active, onClick }: RadioButtonProps): JSX.Eleme
   return (
     <Link to={to} className="no-underline">
       <div
-        className={classNames('f6 flex items-center black', { fw7: active })}
+        className={classNames('f7 flex items-center black', { fw7: active })}
         onClick={onClick}
       >
         {active ? (

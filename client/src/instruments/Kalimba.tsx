@@ -6,6 +6,8 @@ import React from 'react';
 
 // project imports
 import { Instrument, InstrumentProps } from '../Instruments';
+import { DispatchAction } from '../Reducer';
+import { AppState } from '../State';
 
 /** ------------------------------------------------------------------------ **
  * Contains implementation of components for Piano.
@@ -19,6 +21,8 @@ interface KulimbaKeyProps {
   identity: string; 
   octave: number;
   index: number; // octave + index together give a location for the piano key
+  state: AppState;
+  dispatch: React.Dispatch<DispatchAction>;
 }
 
 const Polysynth = new Tone.PolySynth().toDestination();
@@ -34,7 +38,9 @@ export function PianoKey({
   // synth,
   // minor,
   // index,
-  identity 
+  identity,
+  state,
+  dispatch
 }: KulimbaKeyProps): JSX.Element {
   /**
    * This React component corresponds to either a major or minor key in the piano.
@@ -64,17 +70,26 @@ export function PianoKey({
     //   }}
     // ></div>
     <div>
-      <button onMouseDown={() => Polysynth?.triggerAttack(`${note}`)} 
-              onMouseUp={() => Polysynth?.triggerRelease(`${note}`,'+0.19')}
-              style={{
-                    // CSS
-                    // top: 0,
-                    // left: `${index * 2}rem`,
-                    // zIndex: minor ? 1 : 0,
-                    // width: minor ? '1.5rem' : '2rem',
-                    // marginLeft: minor ? '0.25rem' : 0,
-    
-              }}>{identity}</button>
+      <button 
+        onMouseDown={() => {
+          Polysynth?.triggerAttack(`${note}`);
+
+          // only add the note into a new song if recording button has been clicked
+          if(state.get('isRecording')) {
+            dispatch(new DispatchAction('ADD_NOTE_TO_SONG', {
+              note: note
+            }));
+          }
+        }} 
+        onMouseUp={() => Polysynth?.triggerRelease(`${note}`,'+0.19')}
+        style={{
+              // CSS
+              // top: 0,
+              // left: `${index * 2}rem`,
+              // zIndex: minor ? 1 : 0,
+              // width: minor ? '1.5rem' : '2rem',
+              // marginLeft: minor ? '0.25rem' : 0,
+        }}>{identity}</button>
     </div>
   );
 }
@@ -125,7 +140,7 @@ function PianoType({ title, onClick, active }: any): JSX.Element {
   );
 }
 
-function Kalimba({ synth }: InstrumentProps): JSX.Element {
+function Kalimba({ state, dispatch, synth }: InstrumentProps): JSX.Element {
   const keys = List([
     { note: "G5", idx: 0 },
     { note: "F5", idx: 0.5 },
@@ -202,6 +217,8 @@ function Kalimba({ synth }: InstrumentProps): JSX.Element {
                       octave={octave}
                       identity={key.note}
                       index={(octave - 2) * 7 + key.idx}
+                      state={state}
+                      dispatch={dispatch}
                     />
                   );
                 })

@@ -6,6 +6,8 @@ import React from 'react';
 
 // project imports
 import { Instrument, InstrumentProps } from '../Instruments';
+import { DispatchAction } from '../Reducer';
+import { AppState } from '../State';
 
 /** ------------------------------------------------------------------------ **
  * Contains implementation of components for Piano.
@@ -17,6 +19,8 @@ interface FluteKeyProps {
   synth?: Tone.Synth; // Contains library code for making sound
   minor?: boolean; // True if minor key, false if major key
   index: number; // octave + index together give a location for the piano key
+  state: AppState;
+  dispatch: React.Dispatch<DispatchAction>;
 }
 
 const Monosynth = new Tone.MonoSynth().toDestination();
@@ -25,6 +29,8 @@ export function FluteKey({
   note,
   minor,
   index,
+  state,
+  dispatch
 }: FluteKeyProps): JSX.Element {
   /**
    * This React component corresponds to either a major or minor key in the piano.
@@ -36,7 +42,16 @@ export function FluteKey({
     // 2. The JSX will be **transpiled** into the corresponding `React.createElement` library call.
     // 3. The curly braces `{` and `}` should remind you of string interpolation.
     <div
-      onMouseDown={() => Monosynth?.triggerAttack(`${note}`)} // Question: what is `onMouseDown`?
+      onMouseDown={() => {
+        Monosynth?.triggerAttack(`${note}`);
+
+        // only add the note into a new song if recording button has been clicked
+        if(state.get('isRecording')) {
+          dispatch(new DispatchAction('ADD_NOTE_TO_SONG', {
+            note: note
+          }));
+        }
+      }} // Question: what is `onMouseDown`?
       onMouseUp={() => Monosynth?.triggerRelease('+0.32')} // Question: what is `onMouseUp`?
       className={classNames('ba pointer absolute dim', {
         'black bg-white h4': !minor, // major keys are white
@@ -56,7 +71,7 @@ export function FluteKey({
   );
 }
 
-function Flute({ synth }: InstrumentProps): JSX.Element {
+function Flute({ state, dispatch, synth }: InstrumentProps): JSX.Element {
 
   const flute = List([
     [{ note: 'Ab', octave: 6, idx: 9 }, 
@@ -87,6 +102,8 @@ function Flute({ synth }: InstrumentProps): JSX.Element {
                       note={note}
                       synth={synth}
                       index={blow.idx}
+                      state={state}
+                      dispatch={dispatch}
                     />
                   );
                 })}
