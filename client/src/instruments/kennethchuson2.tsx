@@ -232,6 +232,6 @@ function Kalimba({ state, dispatch, synth }: InstrumentProps): JSX.Element {
   );
 }
 
-export const KalimbaInstrument = new Instrument('Kalimba', Kalimba);
+export const KalimbaInstrument = new Instrument('kennethchuson2', Kalimba);
 
 

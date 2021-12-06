@@ -4,12 +4,12 @@ import { List, Map } from 'immutable';
 // project dependencies
 import { PianoInstrument } from './instruments/Piano';
 import { mitchthebakerInstrument } from './instruments/mitchthebaker';
-import { KalimbaInstrument } from './instruments/Kalimba';
+import { KalimbaInstrument } from './instruments/kennethchuson2';
 import { FluteInstrument } from './instruments/Flute';
 
 import { WaveformVisualizer } from './visualizers/Waveform';
 import { mitchthebakerVisualizer } from './visualizers/mitchthebaker';
-import { KennethVisualizer } from './visualizers/KennethVisualizers'
+import { KennethVisualizer } from './visualizers/kennethchuson2'
 import { MichaelWaveformVisualizer } from './visualizers/MichaelWaveform';
 //import { Kalimba } from './instruments/Kalimba'
 
