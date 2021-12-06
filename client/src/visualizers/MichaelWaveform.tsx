@@ -9,7 +9,7 @@ var mapMax = 1.0;
 //var amplitude;
 
 export const MichaelWaveformVisualizer = new Visualizer(
-  'Michael',
+  'Schrodobaggins',
   (p5: P5, analyzer: Tone.Analyser) => {
     const width = window.innerWidth;
     const height = window.innerHeight / 2;
