@@ -8,9 +8,10 @@ var immutable_1 = require("immutable");
 var react_1 = require("react");
 // project imports
 var Instruments_1 = require("../Instruments");
+var Reducer_1 = require("../Reducer");
 var Monosynth = new Tone.MonoSynth().toDestination();
 function FluteKey(_a) {
-    var note = _a.note, minor = _a.minor, index = _a.index;
+    var note = _a.note, minor = _a.minor, index = _a.index, state = _a.state, dispatch = _a.dispatch;
     /**
      * This React component corresponds to either a major or minor key in the piano.
      * See `PianoKeyWithoutJSX` for the React component without JSX.
@@ -20,7 +21,15 @@ function FluteKey(_a) {
     // 1. The JSX refers to the HTML-looking syntax within TypeScript.
     // 2. The JSX will be **transpiled** into the corresponding `React.createElement` library call.
     // 3. The curly braces `{` and `}` should remind you of string interpolation.
-    react_1["default"].createElement("div", { onMouseDown: function () { return Monosynth === null || Monosynth === void 0 ? void 0 : Monosynth.triggerAttack("" + note); }, onMouseUp: function () { return Monosynth === null || Monosynth === void 0 ? void 0 : Monosynth.triggerRelease('+0.32'); }, className: classnames_1["default"]('ba pointer absolute dim', {
+    react_1["default"].createElement("div", { onMouseDown: function () {
+            Monosynth === null || Monosynth === void 0 ? void 0 : Monosynth.triggerAttack("" + note);
+            // only add the note into a new song if recording button has been clicked
+            if (state.get('isRecording')) {
+                dispatch(new Reducer_1.DispatchAction('ADD_NOTE_TO_SONG', {
+                    note: note
+                }));
+            }
+        }, onMouseUp: function () { return Monosynth === null || Monosynth === void 0 ? void 0 : Monosynth.triggerRelease('+0.32'); }, className: classnames_1["default"]('ba pointer absolute dim', {
             'black bg-white h4': !minor
         }), style: {
             // CSS
@@ -35,7 +44,7 @@ function FluteKey(_a) {
 }
 exports.FluteKey = FluteKey;
 function Flute(_a) {
-    var synth = _a.synth;
+    var state = _a.state, dispatch = _a.dispatch, synth = _a.synth;
     var flute = immutable_1.List([
         [{ note: 'Ab', octave: 6, idx: 9 },
             { note: 'Db', octave: 6, idx: 1 },
@@ -54,7 +63,7 @@ function Flute(_a) {
             react_1["default"].createElement("div", { className: "flute" },
                 flute.map(function (blow) { return (react_1["default"].createElement("div", { className: "blow" }, blow.map(function (blow) {
                     var note = "" + blow.note + blow.octave;
-                    return (react_1["default"].createElement(FluteKey, { note: note, synth: synth, index: blow.idx }));
+                    return (react_1["default"].createElement(FluteKey, { note: note, synth: synth, index: blow.idx, state: state, dispatch: dispatch }));
                 }))); }),
                 react_1["default"].createElement("img", { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Pan_flute.svg/868px-Pan_flute.svg.png", alt: "Pan", style: {
                         margin: "10px",
@@ -66,4 +75,4 @@ function Flute(_a) {
                     } })),
             react_1["default"].createElement("div", { className: 'pl4 pt4 flex' }))));
 }
-exports.FluteInstrument = new Instruments_1.Instrument('Flute', Flute);
+exports.FluteInstrument = new Instruments_1.Instrument('schrodobaggins', Flute);

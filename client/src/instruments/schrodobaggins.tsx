@@ -131,4 +131,4 @@ function Flute({ state, dispatch, synth }: InstrumentProps): JSX.Element {
   );
 }
 
-export const FluteInstrument = new Instrument('Flute', Flute);
+export const FluteInstrument = new Instrument('schrodobaggins', Flute);

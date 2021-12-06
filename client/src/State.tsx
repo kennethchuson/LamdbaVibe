@@ -5,7 +5,7 @@ import { List, Map } from 'immutable';
 import { PianoInstrument } from './instruments/Piano';
 import { mitchthebakerInstrument } from './instruments/mitchthebaker';
 import { KalimbaInstrument } from './instruments/kennethchuson2';
-import { FluteInstrument } from './instruments/Flute';
+import { FluteInstrument } from './instruments/schrodobaggins';
 
 import { WaveformVisualizer } from './visualizers/Waveform';
 import { mitchthebakerVisualizer } from './visualizers/mitchthebaker';
