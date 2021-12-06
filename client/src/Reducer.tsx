@@ -29,7 +29,12 @@ type DispatchActionType =
   | 'SET_SONGS'
   | 'PLAY_SONG'
   | 'STOP_SONG'
-  | 'SET_LOCATION';
+  | 'SET_LOCATION'
+  | 'TRIGGER_RECORDING'
+  | 'GET_RECORDING_STATUS'
+  | 'RECORD_A_SONG'
+  | 'TRIGGER_RECORDING_POPUP'
+  | 'ADD_NOTE_TO_SONG';
 
 export class DispatchAction {
   readonly type: DispatchActionType;
@@ -61,13 +66,17 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
 
         return state.set('socket', args.get('socket'));
       }
+      
       case 'DELETE_SOCKET': {
         return state.delete('socket');
       }
+      
       case 'SET_SONGS': {
         const songs = args.get('songs');
+        console.log(songs);
         return state.set('songs', songs);
       }
+      
       case 'PLAY_SONG': {
         const notes = state
           .get('songs')
@@ -75,9 +84,11 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
           .get('notes');
         return state.set('notes', notes);
       }
+      
       case 'STOP_SONG': {
         return state.delete('notes');
       }
+      
       case 'SET_LOCATION': {
         const pathname = args.getIn(['location', 'pathname'], '') as string;
         const search = args.getIn(['location', 'search'], '') as string;
@@ -95,6 +106,33 @@ export function appReducer(state: AppState, action: DispatchAction): AppState {
           .set('instrument', instrument)
           .set('visualizer', visualizer);
       }
+      
+      case 'TRIGGER_RECORDING': {
+        const isRecording = args.get('isRecording');
+
+        return state.set('isRecording', !isRecording);
+      }
+
+      case 'TRIGGER_RECORDING_POPUP': {
+        const openPopup = args.get('openPopup');
+
+        return state.set('openPopup', !openPopup);
+      }
+
+      case 'RECORD_A_SONG': {
+        const song: string[] = args.get('song');
+
+        return state.set('song', song);
+      }
+
+      case 'ADD_NOTE_TO_SONG': {
+        const note: string = args.get('note');
+        let songCopy: string[] = state.get('song');
+            songCopy = [...songCopy, note];
+
+        return state.set('song', songCopy);
+      }
+
       default:
         console.error(`type unknown: ${type}\n`, args.toJS());
         return state;
