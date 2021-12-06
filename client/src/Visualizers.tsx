@@ -2,8 +2,8 @@
 import * as Tone from 'tone';
 import Sketch from 'react-p5';
 import P5 from 'p5';
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import mandelbrot_set from './img/mandelbrot_set.png';
+import { useEffect, useMemo, useCallback } from 'react';
+//import mandelbrot_set from './img/mandelbrot_set.png';
 
 type VisualizerDrawer = (p5: P5, analyzer: Tone.Analyser) => void;
 

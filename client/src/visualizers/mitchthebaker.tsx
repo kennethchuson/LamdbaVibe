@@ -5,15 +5,6 @@ import * as Tone from 'tone';
 // project imports
 import { Visualizer } from '../Visualizers';
 
-interface Item {
-  id: string;
-  name: string;
-}
-
-interface MyInterface {
-  data: Record<string, Item>;
-}
-
 const particles: Particle[] = [];
 
 class Particle {

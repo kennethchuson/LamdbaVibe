@@ -1,4 +1,3 @@
-import { AppState } from '../State';
 import { DispatchAction } from '../Reducer';
 import axios from 'axios';
 import React from 'react';

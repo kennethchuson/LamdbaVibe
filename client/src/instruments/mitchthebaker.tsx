@@ -1,8 +1,7 @@
 
    // 3rd party library imports
 import * as Tone from 'tone';
-import classNames from 'classnames';
-import { List, Range } from 'immutable';
+import { List } from 'immutable';
 import React from 'react';
 import "../css/ukulele.css";
 
@@ -83,7 +82,7 @@ function Ukulele({ state, dispatch, synth, setSynth }: InstrumentProps): JSX.Ele
     [{ note: 'G', octave: 6, idx: 45}, { note: 'C', octave: 6, idx: 46}, { note: 'E', octave: 6, idx: 47}, { note: 'A', octave: 6, idx: 48}]
   ]);
 
-  const standard_tuning_2frets = List([
+  /*const standard_tuning_2frets = List([
     [{ note: 'Eb', octave: 3, idx: 0 }, { note: 'Ab', octave: 3, idx: 1 }, { note: 'C', octave: 3, idx: 2 }, { note: 'F', octave: 3, idx: 3 }],
     [{ note: 'E', octave: 5, idx: 4 }, { note: 'A', octave: 5, idx: 5 }, { note: 'Db', octave: 5, idx: 6 }, { note: 'Gb', octave: 5, idx: 7 }],
     [{ note: 'F', octave: 5, idx: 8 }, { note: 'Bb', octave: 5, idx: 9 }, { note: 'D', octave: 5, idx: 10 }, { note: 'G', octave: 5, idx: 11 }],
@@ -96,9 +95,9 @@ function Ukulele({ state, dispatch, synth, setSynth }: InstrumentProps): JSX.Ele
     [{ note: 'C', octave: 5, idx: 36}, { note: 'F', octave: 5, idx: 37}, { note: 'A', octave: 5, idx: 38}, { note: 'D', octave: 5, idx: 39}],
     [{ note: 'Db', octave: 5, idx: 40}, { note: 'Gb', octave: 5, idx: 42}, { note: 'Bb', octave: 5, idx: 43}, { note: 'Eb', octave: 5, idx: 44}],
     [{ note: 'D', octave: 5, idx: 45}, { note: 'G', octave: 5, idx: 46}, { note: 'B', octave: 5, idx: 47}, { note: 'E', octave: 5, idx: 48}]
-  ]);
+  ]);*/
 
-  const setOscillator = (newType: Tone.ToneOscillatorType) => {
+  /*const setOscillator = (newType: Tone.ToneOscillatorType) => {
     setSynth(oldSynth => {
       oldSynth.disconnect();
 
@@ -106,7 +105,7 @@ function Ukulele({ state, dispatch, synth, setSynth }: InstrumentProps): JSX.Ele
         oscillator: { type: newType } as Tone.OmniOscillatorOptions,
       }).toDestination();
     });
-  };
+  };*/
 
   return (
     <div className="pv4">
