@@ -46,7 +46,7 @@ class Particle {
 }
 
 export const mitchthebakerVisualizer = new Visualizer(
-  'Circumference',
+  'mitchthebaker',
   (p5: P5, analyzer: Tone.Analyser) => {
     const width = window.innerWidth / 2;
     const height = window.innerHeight;

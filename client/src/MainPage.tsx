@@ -12,6 +12,7 @@ import { DispatchAction } from './Reducer';
 import { SideNav } from './SideNav';
 import { VisualizerContainer } from './Visualizers';
 import "./css/recording_popup.css";
+import { addSong } from './utils/apiCreators';
 
 type PanelProps = {
   state: AppState;
@@ -101,15 +102,12 @@ function RecordingForm({state, dispatch}: PanelProps): JSX.Element {
   const [submitted, setSubmitted] = React.useState(false);
   const [input, setInput] = React.useState('');
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
 
     // submit value entered into form input to state to finalize creation of song 
-    dispatch(new DispatchAction('CREATE_SONG', { 
-      songTitle: input,
-      dispatch: dispatch
-    }));
+    await addSong(dispatch, input, state.get('song'));
 
     setTimeout(() => {
       setSubmitting(false);

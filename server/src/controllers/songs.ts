@@ -13,7 +13,7 @@ export const getSongs = async (req: Request, res: Response, next: NextFunction) 
     // get songs from the db 
     try {
         const songs = await DB.runQuery(path.join('get_songs'));
-        console.log(songs);
+        
         return res.status(200).json({
             message: "Successfully got all songs",
             songs: songs
@@ -27,10 +27,20 @@ export const getSongs = async (req: Request, res: Response, next: NextFunction) 
 export const getSong = async (req: Request, res: Response, next: NextFunction) => {
     // get a song from the db 
     try {
-        const id: string = req.params.id; 
+        let title: string = req.params.title; 
+            title = '%' + title + '%';
 
+        if(!title) {
+            return res.status(400).json({
+                message: "Invalid URL parameter sent from request"
+            });
+        }
+
+        const songs = await DB.runQuery(path.join('get_song'), title);
+        
         return res.status(200).json({
-            message: "get a song"
+            message: "Successfully got songs which matched the search term",
+            songs: songs
         });
     }
     catch(err) {
@@ -42,9 +52,8 @@ export const getSong = async (req: Request, res: Response, next: NextFunction) =
 export const updateSong = async (req: Request, res: Response, next: NextFunction) => {
     // update a song from the db 
     try {
-        const { newTitle, songId } = req.query;
-        console.log(newTitle);
-        console.log(songId);
+        const { newTitle } = req.query;
+        const songId: string = req.params.id;
 
         if(!newTitle || !songId) {
             return res.status(400).json({
@@ -72,7 +81,7 @@ export const updateSong = async (req: Request, res: Response, next: NextFunction
 export const deleteSong = async (req: Request, res: Response, next: NextFunction) => {
     // delete a song from the db 
     try {
-        const { songId } = req.body;
+        const songId: string = req.params.id;
         
         if(!songId) {
             return res.status(400).json({

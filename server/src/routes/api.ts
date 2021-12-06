@@ -3,9 +3,9 @@ const router = express.Router();
 import { getSongs, getSong, updateSong, deleteSong, addSong } from '../controllers/songs';
 
 router.get('/songs', getSongs);
-router.get('/songs/:id', getSong);
-router.put('/songs', updateSong);
-router.delete('/songs', deleteSong);
+router.get('/songs/:title', getSong);
+router.put('/songs/:id', updateSong);
+router.delete('/songs/:id', deleteSong);
 router.post('/songs', addSong);
 
 export default router;

@@ -18,6 +18,7 @@ import { Instrument } from './Instruments';
 import { Visualizer } from './Visualizers';
 import './css/ud-menu.css';
 import './css/recording_button.css';
+import { getSong, updateSong, deleteSong, getSongs } from './utils/apiCreators';
 
 /** ------------------------------------------------------------------------ **
  * All the components in the side navigation.
@@ -29,6 +30,12 @@ interface SideNavProps {
   isShowingUD?: boolean;
   songId?: number;
   song?: Map<any, any>; 
+  handleSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  searchTerm?: string;
+}
+
+interface SearchProps {
+  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Section: React.FC<{ title: string }> = ({ title, children }) => {
@@ -86,24 +93,18 @@ function UpdateAndDeleteButton({state, dispatch, songId, isShowingUD}: SideNavPr
 
   const [newTitle, setNewTitle] = React.useState('');
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(newTitle);
 
-    dispatch(new DispatchAction('UPDATE_SONG_TITLE', {
-      songId: songId,
-      newTitle: newTitle,
-      dispatch: dispatch
-    }));
+    if(songId)
+      await updateSong(dispatch, newTitle, songId);
 
     setNewTitle('');
   };
 
-  const handleDelete = () => {
-    dispatch(new DispatchAction('DELETE_SONG', { 
-      songId: songId,
-      dispatch: dispatch
-    }));
+  const handleDelete = async () => {
+    if(songId)
+      await deleteSong(dispatch, songId);
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setNewTitle(e.target.value);
@@ -178,6 +179,29 @@ function Visualizers({ state }: SideNavProps): JSX.Element {
   );
 }
 
+function Search({handleSearchChange}: SearchProps): JSX.Element {
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <fieldset className="form-fieldset">
+        <label>
+          <input 
+            type="text"
+            name="search"
+            onChange={handleSearchChange}
+            placeholder="Search"
+            autoComplete="off"
+          />
+          <input type="submit" hidden />
+        </label>
+      </fieldset>
+    </form>
+  );
+}
+
 function Song({state, dispatch, songId, song}: SideNavProps): JSX.Element {
 
   // UD is an abbreviation for update/delete 
@@ -213,13 +237,14 @@ function Song({state, dispatch, songId, song}: SideNavProps): JSX.Element {
   );
 }
 
-function Songs({ state, dispatch }: SideNavProps): JSX.Element {
+function Songs({ state, dispatch, searchTerm }: SideNavProps): JSX.Element {
   const songs: List<any> = state.get('songs', List());
-
 
   return (
     <Section title="Playlist">
-      {songs.map(song => {
+      {songs
+        .filter(song => song.get('songTitle').includes(searchTerm))
+        .map(song => {
         const songId: number = song.get('id');
 
         return (
@@ -247,7 +272,6 @@ function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
 
           // create some sort of condition here if isRecording is set to true
           if(!state.get('isRecording')) {
-            console.log("start recording");
             setStartRecording(true);
 
             // notify redux that a new song should be created
@@ -258,7 +282,6 @@ function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
           }
           else {
             // stop recording a song and add song to db
-            console.log("stop recording");
             setStartRecording(false);
             setStopRecording(true);
 
@@ -288,6 +311,26 @@ function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
 }
 
 export function SideNav({ state, dispatch }: SideNavProps): JSX.Element {
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.value === '') {
+      // clear searched songs from state
+      await getSongs(dispatch);
+      setSearchTerm('');
+      return;
+    }
+
+    if(searchTerm.includes(e.target.value)) {
+      // if the new search value is already in search term, another API is not necessary
+      setSearchTerm(e.target.value);
+      return;
+    }
+
+    await getSong(dispatch, e.target.value);
+    setSearchTerm('');
+  };
+  
   return (
     <div className="absolute top-0 left-0 bottom-0 w5 z-1 shadow-1 bg-white flex flex-column">
       <div className="h3 fw7 f5 flex items-center pl3 bb b--light-gray">
@@ -296,7 +339,8 @@ export function SideNav({ state, dispatch }: SideNavProps): JSX.Element {
       <div className="flex-auto">
         <Instruments state={state} dispatch={dispatch} />
         <Visualizers state={state} dispatch={dispatch} />
-        <Songs state={state} dispatch={dispatch} />
+        <Search handleSearchChange={handleSearchChange}/>
+        <Songs state={state} dispatch={dispatch} searchTerm={searchTerm}/>
         <RecordingButtons state={state} dispatch={dispatch}/>
       </div>
     </div>

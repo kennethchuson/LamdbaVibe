@@ -140,4 +140,4 @@ function Ukulele({ state, dispatch, synth, setSynth }: InstrumentProps): JSX.Ele
   );
 }
 
-export const mitchthebakerInstrument = new Instrument('Ukulele', Ukulele);
+export const mitchthebakerInstrument = new Instrument('mitchthebaker', Ukulele);
