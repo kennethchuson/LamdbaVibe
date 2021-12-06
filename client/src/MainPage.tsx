@@ -86,10 +86,10 @@ function RecordingPopup({state, dispatch}: PanelProps): JSX.Element {
 
   return (
     <Popup open={openPopup} closeOnDocumentClick>
-      <div className="modal popup">
-        <a className="close" onClick={closeModal}>
+      <div className="modal">
+        <button className="close close-modal" onClick={closeModal}>
           &times;
-        </a>
+        </button>
         <RecordingForm state={state} dispatch={dispatch}/>
       </div>
     </Popup>
@@ -127,15 +127,17 @@ function RecordingForm({state, dispatch}: PanelProps): JSX.Element {
   return (
     <form className="recording-form" onSubmit={handleSubmit}>
       <fieldset className="form-fieldset">
-        <label>
+        <label className="form-fieldset-label">
           <h3> You're almost done! </h3>
-          <p> As a last step, enter a song title for your song recording. </p>
-          <input value={input} onChange={handleInputChange}/>
+          <p> As a last step, enter a title for your song recording. </p>
+          <input value={input} onChange={handleInputChange} placeholder="Enter a song title"/>
         </label>
       </fieldset>
-      <button type="submit"> Submit </button>
-      {submitting && <div> Submitting form... </div>}
-      {submitted && <div> Your song has been submitted! </div>}
+      <button className="form-button" type="submit"> Submit </button>
+      <div className="form-submission-message">
+        {submitting && <p> Submitting form... </p>}
+        {submitted && <p> Your song has been submitted! </p>}
+      </div>
     </form>
   );
 }

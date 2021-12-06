@@ -126,7 +126,7 @@ function PianoKeyWithoutJSX({
   );
 }
 
-function PianoType({ title, onClick, active }: any): JSX.Element {
+/*function PianoType({ title, onClick, active }: any): JSX.Element {
   return (
     <div
       onClick={onClick}
@@ -138,7 +138,7 @@ function PianoType({ title, onClick, active }: any): JSX.Element {
       {title}
     </div>
   );
-}
+}*/
 
 function Kalimba({ state, dispatch, synth }: InstrumentProps): JSX.Element {
   const keys = List([
@@ -175,7 +175,7 @@ function Kalimba({ state, dispatch, synth }: InstrumentProps): JSX.Element {
   //   });
   // };
 
-  const oscillators: List<OscillatorType> = List([
+  /*const oscillators: List<OscillatorType> = List([
     'sine',
     'sawtooth',
     'square',
@@ -186,7 +186,7 @@ function Kalimba({ state, dispatch, synth }: InstrumentProps): JSX.Element {
     'amsine',
     'amsawtooth',
     'amtriangle',
-  ]) as List<OscillatorType>;
+  ]) as List<OscillatorType>;*/
 
   return (
     <div className="pv5">

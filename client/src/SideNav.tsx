@@ -8,7 +8,6 @@ import {
   RadioButtonChecked20,
   Music20,
   TrashCan20,
-  Edit20,
   OverflowMenuHorizontal20,
 } from '@carbon/icons-react';
 
@@ -18,7 +17,7 @@ import { AppState } from './State';
 import { Instrument } from './Instruments';
 import { Visualizer } from './Visualizers';
 import './css/ud-menu.css';
-
+import './css/recording_button.css';
 
 /** ------------------------------------------------------------------------ **
  * All the components in the side navigation.
@@ -75,9 +74,11 @@ function RadioButton({ to, text, active, onClick }: RadioButtonProps): JSX.Eleme
 
 function RecordingButton({ isRecording, onClick }: RecordingButtonProps): JSX.Element {
   return (
-    <button className="flex items-center" onClick={onClick}>
-      {isRecording ? "Stop" : "Record"}
-    </button>
+    <div className="recording-buttons">
+      <button className="recording-button" onClick={onClick}>
+        {isRecording ? "Stop" : "Record"}
+      </button>
+    </div>
   );
 }
 
@@ -118,14 +119,14 @@ function UpdateAndDeleteButton({state, dispatch, songId, isShowingUD}: SideNavPr
                     value={newTitle}
                     onChange={handleTitleChange}
                     type="text"
-                    placeholder="Edit the song name"
+                    placeholder="Edit the song title"
                 />
                 <input type="submit" hidden /> 
               </label>
             </fieldset>
           </form>
           <TrashCan20 
-            className="delete-icon"
+            className="delete-icon dim"
             onClick={handleDelete}
           />
         </div>
@@ -201,6 +202,7 @@ function Song({state, dispatch, songId, song}: SideNavProps): JSX.Element {
           <div className="overflow-menu">
             <OverflowMenuHorizontal20 
               onClick={() => setIsShowingUD(!isShowingUD)}
+              className="dim"
             />
           </div>
         </div>
@@ -231,6 +233,8 @@ function Songs({ state, dispatch }: SideNavProps): JSX.Element {
 function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
   const isRecording: boolean = state.get('isRecording');
   const openPopup: boolean = state.get('openPopup');
+  const [startRecording, setStartRecording] = React.useState(false);
+  const [stopRecording, setStopRecording] = React.useState(false);
 
   return (
     <Section title="Record a Song">
@@ -244,6 +248,8 @@ function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
           // create some sort of condition here if isRecording is set to true
           if(!state.get('isRecording')) {
             console.log("start recording");
+            setStartRecording(true);
+
             // notify redux that a new song should be created
             // a song should simply hold a list of the notes clicked by the user 
             dispatch(new DispatchAction('RECORD_A_SONG', {
@@ -253,7 +259,13 @@ function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
           else {
             // stop recording a song and add song to db
             console.log("stop recording");
-            
+            setStartRecording(false);
+            setStopRecording(true);
+
+            setTimeout(() => {
+              setStopRecording(false);
+            }, 3000);
+
             // if a recording is stopped, then open the popup menu where the song title will be input
             dispatch(new DispatchAction('TRIGGER_RECORDING_POPUP', {
               openPopup: openPopup
@@ -262,6 +274,15 @@ function RecordingButtons({ state, dispatch }: SideNavProps): JSX.Element {
         }}
         isRecording={isRecording}
       />
+      <div className="recording-button-message-wrapper">
+        {startRecording && 
+          <div className="recording-button-message">
+            <div className="blinking-record-icon">  </div>
+            <p> Your recording is live </p>
+          </div>
+        }
+        {stopRecording && <p> Your recording has stopped </p>}
+      </div>
     </Section>
   );
 }

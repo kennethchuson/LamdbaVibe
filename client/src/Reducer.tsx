@@ -1,6 +1,6 @@
 // 3rd party
 import { List, Map, fromJS } from 'immutable';
-import { getSongs, updateSong, addSong, deleteSong } from './utils/apiCreators';
+import { updateSong, addSong, deleteSong } from './utils/apiCreators';
 
 // project deps
 import { Instrument } from './Instruments';
